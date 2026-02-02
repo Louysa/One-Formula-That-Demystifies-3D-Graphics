@@ -23,15 +23,23 @@ function point({x,y}){
 
 
 clear();
-point(screen({x:-1,y:1}));
+point(screen(project({x:0.5,y:0,z:1})));
 
 
 function screen(p){
+    // Converting canvas to axis system
     // -1...1  + 1 => 0..2  / 2 => 0..1 x Width => 0..w
     return {
         x: (p.x + 1) / 2 * game.width,
         y: (1-(p.y + 1)/2) * game.height,
     }
 
+}
+
+function project({x,y,z}){
+    return{
+        x: x/z,
+        y: y/z
+    }
 }
 
