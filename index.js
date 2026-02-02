@@ -21,10 +21,37 @@ function point({x,y}){
     ctx.fillRect(x - s/2,y- s/2,s,s);
 }
 
+const FPS = 60;
+let dz = 1;
 
-clear();
-point(screen(project({x:0.5,y:0,z:1})));
+const  vs = [
+    {x:0.5,y:0.5,z:0.5},
+    {x:-0.5,y:0.5,z:0.5},
+    {x:0.5,y:-0.5,z:0.5},
+    {x:-0.5,y:-0.5,z:0.5},
 
+    {x:0.5,y:0.5,z:-0.5},
+    {x:-0.5,y:0.5,z:-0.5},
+    {x:0.5,y:-0.5,z:-0.5},
+    {x:-0.5,y:-0.5,z:-0.5},
+]
+
+function translate_z({x,y,z},dz){
+    return {x:x,y:y,z:z+dz}
+}
+function frame(){
+    const dt = 1 / FPS;
+    dz += 1 * dt
+    clear();
+    
+    for(const v of vs){
+        point(screen(project(translate_z(v,dz))));
+    }
+
+    setTimeout(frame,1000/FPS);
+}
+
+setTimeout(frame,1000/FPS)
 
 function screen(p){
     // Converting canvas to axis system
@@ -42,4 +69,6 @@ function project({x,y,z}){
         y: y/z
     }
 }
+
+
 
