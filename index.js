@@ -24,16 +24,17 @@ function point({x,y}){
 const FPS = 60;
 let dz = 1;
 
+let angle = 0;
 const  vs = [
-    {x:0.5,y:0.5,z:0.5},
-    {x:-0.5,y:0.5,z:0.5},
-    {x:0.5,y:-0.5,z:0.5},
-    {x:-0.5,y:-0.5,z:0.5},
+    {x:0.25,y:0.25,z:0.25},
+    {x:-0.25,y:0.25,z:0.25},
+    {x:0.25,y:-0.25,z:0.25},
+    {x:-0.25,y:-0.25,z:0.25},
 
-    {x:0.5,y:0.5,z:-0.5},
-    {x:-0.5,y:0.5,z:-0.5},
-    {x:0.5,y:-0.5,z:-0.5},
-    {x:-0.5,y:-0.5,z:-0.5},
+    {x:0.25,y:0.25,z:-0.25},
+    {x:-0.25,y:0.25,z:-0.25},
+    {x:0.25,y:-0.25,z:-0.25},
+    {x:-0.25,y:-0.25,z:-0.25},
 ]
 
 function translate_z({x,y,z},dz){
@@ -42,10 +43,12 @@ function translate_z({x,y,z},dz){
 function frame(){
     const dt = 1 / FPS;
     dz += 1 * dt
+
+    angle += 2 * Math.PI * dt
     clear();
     
     for(const v of vs){
-        point(screen(project(translate_z(v,dz))));
+        point(screen(project(translate_z(rotate_xz(v,angle),dz))));
     }
 
     setTimeout(frame,1000/FPS);
@@ -67,6 +70,16 @@ function project({x,y,z}){
     return{
         x: x/z,
         y: y/z
+    }
+}
+
+function rotate_xz({x,y,z},angle){
+    const c = Math.cos(angle);
+    const s = Math.sin(angle);
+    return{
+        x: x*c - z*s,
+        y,
+        z: x*s + z*c,
     }
 }
 
